@@ -6,7 +6,7 @@ import WordsBuilder from "./components/WordsBuilder";
 const assembelWordArr = ["word", "blue", "green"];
 
 const testWord = "hello";
-const example = { ukr: "чудово", eng: "marvelous" };
+const example = { ukr: "година", eng: "hour" };
 
 export default function App() {
   return (
@@ -24,6 +24,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 40,
+    marginTop: 100,
   },
 });
