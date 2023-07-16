@@ -6,13 +6,8 @@ type wordsBuilderProps = {
   set: wordTranslation;
 };
 
-// this component accepts a word parameter and
-
-// the problem with this component is that it accepts a word but rather it needs to accept and object of type
-// {
-//  ukr: "слово", eng: "word"
-//  }
-// this way I will be able to show user a word in ukr so user can find a translation by gathering the eng letters correctly
+// for long words would be great to have a functionality that will display only unique letters,
+// and if they repeats just display a number above the letter saying home many such letters we have
 
 let buildingBowrd = ""; // this will be a word that is being build when user is picking letters correctly
 export default function WordsBuilder({ set: { ukr, eng } }: wordsBuilderProps) {
@@ -38,10 +33,7 @@ export default function WordsBuilder({ set: { ukr, eng } }: wordsBuilderProps) {
 
     if (letterMatch) {
       buildingBowrd += letter;
-      // console.log("buildingBowrd: ", buildingBowrd);
-      // console.log(eng.split('').splice(count, 1).join(''));
-      setEngWordArr(prev => prev.filter((_, i) => i !== index));
-      // setEngWordArr(eng.slice(count,1))
+      setEngWordArr(prev => prev.filter((_, i) => i !== index));// removing pressed btn
       incrementCount(); // when the letter is matched, we encrice the counter to track the next letter user needs to input
     }
 
