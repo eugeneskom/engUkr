@@ -15,11 +15,22 @@ export default function WordsBuilder({ set: { ukr, eng } }: wordsBuilderProps) {
   const [activeLetterIndex, setActiveLetterIndex] = useState(-1);
   const [isLetterMatch, setIsLetterMatch] = useState(false);
   const [engWordArr, setEngWordArr] = useState<string[]>([]);
+  const [isWordCompeleted, setIsWordCompleted] = useState(false);
 
-  const mixLettersArrayHandler = (eng: string): string[] => {
-    const letters = eng.split("");
-    const mixedLetters = letters.sort(() => Math.random() - 0.5);
-    return mixedLetters;
+  console.log("isWordCompeleted: ", isWordCompeleted);
+  const mixLettersArrayHandler = (eng: string): string => {
+    if (eng.length <= 1) {
+      return eng; // if the string is one character or less, just return it
+    }
+
+    let letters = eng.split("");
+    let mixedLetters;
+
+    do {
+      mixedLetters = [...letters].sort(() => Math.random() - 0.5);
+    } while (eng === mixedLetters.join(""));
+
+    return mixedLetters.join("");
   };
 
   const incrementCount = () => {
@@ -32,8 +43,11 @@ export default function WordsBuilder({ set: { ukr, eng } }: wordsBuilderProps) {
     setIsLetterMatch(letterMatch);
 
     if (letterMatch) {
+      setEngWordArr((prev) => prev.filter((_, i) => i !== index)); // removing pressed btn
       buildingBowrd += letter;
-      setEngWordArr(prev => prev.filter((_, i) => i !== index));// removing pressed btn
+      if (buildingBowrd.length === eng.length) {
+        setIsWordCompleted(true);
+      }
       incrementCount(); // when the letter is matched, we encrice the counter to track the next letter user needs to input
     }
 
@@ -67,6 +81,11 @@ export default function WordsBuilder({ set: { ukr, eng } }: wordsBuilderProps) {
       <View>
         <Text>{ukr}</Text>
       </View>
+      {isWordCompeleted && (
+        <View>
+          <Text>Hooray motherfucka, the word is completed!</Text>
+        </View>
+      )}
       <View>
         <Text>{buildingBowrd}</Text>
       </View>
