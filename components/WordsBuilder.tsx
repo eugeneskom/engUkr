@@ -18,9 +18,9 @@ export default function WordsBuilder({ set: { ukr, eng } }: wordsBuilderProps) {
   const [isWordCompeleted, setIsWordCompleted] = useState(false);
 
   console.log("isWordCompeleted: ", isWordCompeleted);
-  const mixLettersArrayHandler = (eng: string): string => {
+  const mixLettersArrayHandler = (eng: string): string[] => {
     if (eng.length <= 1) {
-      return eng; // if the string is one character or less, just return it
+      return eng.split(''); // if the string is one character or less, just return it
     }
 
     let letters = eng.split("");
@@ -30,7 +30,7 @@ export default function WordsBuilder({ set: { ukr, eng } }: wordsBuilderProps) {
       mixedLetters = [...letters].sort(() => Math.random() - 0.5);
     } while (eng === mixedLetters.join(""));
 
-    return mixedLetters.join("");
+    return mixedLetters
   };
 
   const incrementCount = () => {
