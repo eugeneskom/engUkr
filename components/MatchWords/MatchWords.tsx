@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { matchWordObjType } from "../../types/types";
-import { Text, View,FlatList,SafeAreaView } from "react-native";
-
+import { Text, View, FlatList, SafeAreaView, TouchableOpacity } from "react-native";
 
 type MatchWordsProps = {
   words: matchWordObjType[];
@@ -16,22 +15,72 @@ function shuffleArray(array: any[]) {
 }
 
 export default function MatchWords({ words }: MatchWordsProps) {
-  const ukrWords = words.map((item) => ({ id: item.id, word: item.ukr }));
-  const engWords = words.map((item) => ({ id: item.id, word: item.eng }));
-
+  const ukrWords = words.map((item) => ({ id: item.id, word: item.ukr, lang: "ukr" }));
+  const engWords = words.map((item) => ({ id: item.id, word: item.eng, lang: "eng" }));
   const shuffledUkrWords = shuffleArray(ukrWords);
   const shuffledEngWords = shuffleArray(engWords);
 
-  console.log("shuffledUkrWords: ", shuffledUkrWords, "shuffledEngWords: ", shuffledEngWords);
+  const [ukrWordsKist, setUkrWordsList] = useState(ukrWords);
+  const [engWordsKist, setEngWordsList] = useState(engWords);
+  const [activeUkrId, setActiveUkrId] = useState<string | null>(null);
+  const [activeEngId, setActiveEngId] = useState<string | null>(null);
+
+
+  console.log("Selected words ids", activeUkrId, activeEngId);
+  const wordSelectHandler = (id: string, word: string, index: number, lang: string) => {
+    console.log("word:", word);
+    console.log("id:", id);
+    console.log("lang:", lang);
+    if (lang == "ukr" && activeEngId) {
+        if(id == activeEngId){
+          setUkrWordsList(prev => prev.filter(word => word.id != id))
+        }
+    }
+  };
+  
+
+
+  const renderItem = ({ item, index }: { item: { id: string; word: string }; index: number }) => {
+    return (
+      <TouchableOpacity style={Styles.item} onPress={() => wordSelectHandler(item.id, item.word, index, item.lang)}>
+        <Text>{item.word}</Text>
+      </TouchableOpacity>
+    );
+  };
+
+  const keyExtractor = (item: string, index: number) => {
+    // Use the index as the key
+    return index.toString();
+  };
+
+  // console.log("shuffledUkrWords: ", shuffledUkrWords, "shuffledEngWords: ", shuffledEngWords);
 
   return (
-    <SafeAreaView style={{ flex: 1, flexDirection: "row" }}>
-      <View style={{ flex: 1 }}>
-        <FlatList data={shuffledUkrWords} keyExtractor={(item) => item.id.toString()} renderItem={({ item }) => <Text>{item.word}</Text>} />
-      </View>
-      <View style={{ flex: 1 }}>
-        <FlatList data={shuffledEngWords} keyExtractor={(item) => item.id.toString()} renderItem={({ item }) => <Text>{item.word}</Text>} />
-      </View>
-    </SafeAreaView>
+    <>
+      <Text>Match words</Text>
+      <SafeAreaView style={{ flex: 1, flexDirection: "row", padding: 20 }}>
+        <View style={{ flex: 1 }}>
+          <FlatList style={Styles.list} data={shuffledUkrWords} keyExtractor={keyExtractor} renderItem={renderItem} />
+        </View>
+        <View style={{ flex: 1 }}>
+          <FlatList style={Styles.list} data={shuffledEngWords} keyExtractor={keyExtractor} renderItem={renderItem} />
+        </View>
+      </SafeAreaView>
+    </>
   );
 }
+
+const Styles = {
+  list: {
+    columnGap: 10,
+    rowGap: 10,
+  },
+
+  item: {
+    backgroundColor: "#eee",
+    padding: 20,
+    margin: 10,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+};
