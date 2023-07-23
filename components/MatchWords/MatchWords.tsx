@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { matchWordObjType } from "../../types/types";
 import { Text, View, FlatList, SafeAreaView, TouchableOpacity } from "react-native";
 
@@ -20,21 +20,52 @@ export default function MatchWords({ words }: MatchWordsProps) {
   const shuffledUkrWords = shuffleArray(ukrWords);
   const shuffledEngWords = shuffleArray(engWords);
 
-  const [ukrWordsKist, setUkrWordsList] = useState(ukrWords);
-  const [engWordsKist, setEngWordsList] = useState(engWords);
+  const [ukrWordsKist, setUkrWordsList] = useState(shuffledUkrWords);
+  const [engWordsKist, setEngWordsList] = useState(shuffledEngWords);
   const [activeUkrId, setActiveUkrId] = useState<string | null>(null);
   const [activeEngId, setActiveEngId] = useState<string | null>(null);
 
 
-  console.log("Selected words ids", activeUkrId, activeEngId);
+  console.log("Selected words ids",shuffledUkrWords, shuffledEngWords, activeUkrId, activeEngId);
+  // const wordSelectHandler = (id: string, word: string, index: number, lang: string) => {
+  //   console.log("word:", word);
+  //   console.log("id:", id);
+  //   console.log("lang:", lang);
+  //   if (lang == "ukr" && activeEngId) {
+  //       if(id == activeEngId){
+  //         setUkrWordsList(prev => prev.filter(word => word.id != Number(id)))
+  //         setEngWordsList(prev => prev.filter(word => word.id != Number(id)))
+  //       }
+  //   }
+  // };
+
   const wordSelectHandler = (id: string, word: string, index: number, lang: string) => {
     console.log("word:", word);
     console.log("id:", id);
     console.log("lang:", lang);
-    if (lang == "ukr" && activeEngId) {
-        if(id == activeEngId){
-          setUkrWordsList(prev => prev.filter(word => word.id != id))
+    
+    if (lang === "ukr") {
+      setActiveUkrId(id);
+      if (activeEngId === id) {
+        if (ukrWordsKist.length === 1 && engWordsKist.length === 1) {
+          setUkrWordsList([]);
+          setEngWordsList([]);
+        } else {
+          setUkrWordsList((prev) => prev.filter((word) => word.id !== id));
+          setEngWordsList((prev) => prev.filter((word) => word.id !== id));
         }
+      }
+    } else if (lang === "eng") {
+      setActiveEngId(id);
+      if (activeUkrId === id) {
+        if (ukrWordsKist.length === 1 && engWordsKist.length === 1) {
+          setUkrWordsList([]);
+          setEngWordsList([]);
+        } else {
+          setUkrWordsList((prev) => prev.filter((word) => word.id !== id));
+          setEngWordsList((prev) => prev.filter((word) => word.id !== id));
+        }
+      }
     }
   };
   
@@ -53,17 +84,15 @@ export default function MatchWords({ words }: MatchWordsProps) {
     return index.toString();
   };
 
-  // console.log("shuffledUkrWords: ", shuffledUkrWords, "shuffledEngWords: ", shuffledEngWords);
-
   return (
     <>
       <Text>Match words</Text>
       <SafeAreaView style={{ flex: 1, flexDirection: "row", padding: 20 }}>
         <View style={{ flex: 1 }}>
-          <FlatList style={Styles.list} data={shuffledUkrWords} keyExtractor={keyExtractor} renderItem={renderItem} />
+          <FlatList style={Styles.list} data={ukrWordsKist} keyExtractor={keyExtractor} renderItem={renderItem} />
         </View>
         <View style={{ flex: 1 }}>
-          <FlatList style={Styles.list} data={shuffledEngWords} keyExtractor={keyExtractor} renderItem={renderItem} />
+          <FlatList style={Styles.list} data={engWordsKist} keyExtractor={keyExtractor} renderItem={renderItem} />
         </View>
       </SafeAreaView>
     </>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, Image, Button, TextInput, FlatList, TouchableOpacity } from "react-native";
-import { wordTranslation } from "../types/types";
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, SafeAreaView } from "react-native";
+import { wordTranslation } from "../../types/types";
 
 type wordsBuilderProps = {
   set: wordTranslation;
@@ -20,7 +20,7 @@ export default function WordsBuilder({ set: { ukr, eng } }: wordsBuilderProps) {
   console.log("isWordCompeleted: ", isWordCompeleted);
   const mixLettersArrayHandler = (eng: string): string[] => {
     if (eng.length <= 1) {
-      return eng.split(''); // if the string is one character or less, just return it
+      return eng.split(""); // if the string is one character or less, just return it
     }
 
     let letters = eng.split("");
@@ -30,7 +30,7 @@ export default function WordsBuilder({ set: { ukr, eng } }: wordsBuilderProps) {
       mixedLetters = [...letters].sort(() => Math.random() - 0.5);
     } while (eng === mixedLetters.join(""));
 
-    return mixedLetters
+    return mixedLetters;
   };
 
   const incrementCount = () => {
@@ -77,7 +77,7 @@ export default function WordsBuilder({ set: { ukr, eng } }: wordsBuilderProps) {
   }, []);
 
   return (
-    <>
+    <SafeAreaView style={{alignContent:'center', justifyContent:"center"}}>
       <View>
         <Text>{ukr}</Text>
       </View>
@@ -92,7 +92,7 @@ export default function WordsBuilder({ set: { ukr, eng } }: wordsBuilderProps) {
       <View style={flatListStyles.listContainer}>
         <FlatList style={flatListStyles.list} keyExtractor={keyExtractor} data={engWordArr} renderItem={renderItem} horizontal={true} />
       </View>
-    </>
+    </SafeAreaView>
   );
 }
 
