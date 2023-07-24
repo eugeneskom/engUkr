@@ -4,6 +4,7 @@ import { useState } from "react";
 import WordsBuilder from "./components/WordsBuilder/WordsBuilder";
 import MatchWords from "./components/MatchWords/MatchWords";
 import { matchWordObjType } from "./types/types";
+import Preposition from "./components/Prepositions/Preposition";
 
 const assembelWordArr = ["word", "blue", "green"];
 
@@ -20,7 +21,8 @@ export default function App() {
   return (
     <View style={{flexDirection:"column"}}>
       <View style={styles.container}>
-        <MatchWords words={matchWordsArr} />
+        {/* <MatchWords words={matchWordsArr} /> */}
+        <Preposition/>
         {/* <WordsBuilder set={example} /> */}
       </View>
     </View>
