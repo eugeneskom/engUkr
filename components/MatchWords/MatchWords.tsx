@@ -7,11 +7,7 @@ type MatchWordsProps = {
   words: matchWordObjType[];
 };
 
-interface matchWordObjType {
-  id: number;
-  ukr: string;
-  eng: string;
-}
+
 
 
 function shuffleArray(array: any[]) {
@@ -44,6 +40,7 @@ export default function MatchWords({ words }: MatchWordsProps) {
 
   console.log("COUNT: ", COUNT);
   useEffect(() => {
+    console.log('shuffledUkrWords: ',shuffledUkrWords)
     setUkrWordsList(shuffledUkrWords);
     setEngWordsList(shuffledEngWords);
 

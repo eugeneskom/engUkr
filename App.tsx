@@ -34,6 +34,9 @@ const matchWordsArr: matchWordObjType[] = [
 
 const testWord = "hello";
 const example = { ukr: "година", eng: "hour" };
+const wordsToBuild = [
+  {id:0, ukr: "година", eng: "hour" },
+]
 
 const rowObj = [
   { id: 1, sentence: "I _ my homework", preposition: "did", choices: ["did", "made", "does", "make"] },
@@ -53,9 +56,9 @@ export default function App() {
   return (
     <View style={{flexDirection:"column"}}>
       <View style={styles.container}>
-        <MatchWords words={matchWordsArr} />
+        {/* <MatchWords words={matchWordsArr} /> */}
         {/* <Preposition prepRows={rowObj}/> */}
-        {/* <WordsBuilder set={example} /> */}
+        <WordsBuilder set={example} />
       </View>
     </View>
   );
@@ -63,7 +66,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
+    flex: 1,
     height: "100%",
     backgroundColor: "#fff",
     alignItems: "center",
