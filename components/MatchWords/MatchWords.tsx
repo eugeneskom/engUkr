@@ -1,6 +1,7 @@
 import React, { useState,useEffect } from "react";
 import { matchWordObjType } from "../../types/types";
 import { Text, View, FlatList, SafeAreaView, TouchableOpacity } from "react-native";
+import ProgressBar from "../ProgressBar/ProgressBar";
 
 type MatchWordsProps = {
   words: matchWordObjType[];

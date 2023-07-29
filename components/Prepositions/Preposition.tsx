@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, Text, View, TouchableOpacity } from "react-native";
+import { FlatList, Text, View, TouchableOpacity, Button } from "react-native";
+import ProgressBar from "../ProgressBar/ProgressBar";
 
 type preposObj = {
   id: number;
@@ -16,14 +17,12 @@ export default function Preposition({ prepRows }: PrepositionProps) {
   const [count, setCount] = useState(0);
   const [rows, setRows] = useState<preposObj[]>(prepRows);
   const [correctAnswer, setCorrectAnser] = useState(rows[count].preposition);
-  const [isCorrect, setIsCorrect] = useState<null | boolean>(null);
   const [currentRow, setCurrentRow] = useState<preposObj>(prepRows[0]);
   const [isFinished, setIsFinished] = useState(false);
 
   useEffect(() => {
     setCurrentRow(rows[count]);
     setCorrectAnser(rows[count].preposition);
-    setIsCorrect(null);
     setIsFinished(false);
     return () => {
       // Cleanup function
@@ -33,15 +32,13 @@ export default function Preposition({ prepRows }: PrepositionProps) {
   const selectPrepHandler = (preposition: string) => {
     const rowsNumber = rows.length - 1;
     const isCorrect = correctAnswer === preposition;
-    setIsCorrect(isCorrect);
-
     if (isCorrect && count < rowsNumber) {
       setCurrentRow((prevRow) => {
         return { ...prevRow, sentence: prevRow.sentence.replace("_", preposition) };
       });
       setTimeout(() => {
         setCount(count + 1);
-      }, 500);
+      }, 300);
     } else if (count >= rowsNumber) {
       setIsFinished(true);
     }
@@ -60,14 +57,22 @@ export default function Preposition({ prepRows }: PrepositionProps) {
     return index.toString();
   };
 
+  const handleNext = () => {
+    console.log("next");
+  };
+
   return (
     <>
       {!isFinished ? (
-        <View>
-          {isCorrect === false && <Text>Wrong answer!</Text>}
-          {isCorrect && <Text>Hooray, you did it!</Text>}
-          <Text>{currentRow.sentence}</Text>
-          <FlatList data={currentRow.choices} keyExtractor={keyExtractor} renderItem={renderItem} />
+        <View style={Styles.container}>
+          <ProgressBar total={rows.length} answered={count} />
+          <View style={Styles.content}>
+            <Text>{currentRow.sentence}</Text>
+            <FlatList data={currentRow.choices} keyExtractor={keyExtractor} renderItem={renderItem} />
+          </View>
+          <View>
+            <Button style={Styles.nextBtn} title="Click Me!" onPress={handleNext} color="#007AFF" />
+          </View>
         </View>
       ) : (
         <View>
@@ -79,12 +84,20 @@ export default function Preposition({ prepRows }: PrepositionProps) {
 }
 
 const Styles = {
-  view: {
+  container: {
     flex: 1,
+    justifyContent: "stretch",
+    alignItems: "center",
+    backgroundColor: "#FD9317",
+  },
+  content: {
+    alignSelf: "flex-start",
   },
   item: {
     padding: 20,
     backgroundColor: "#eee",
     margin: 10,
+  },
+  nextBtn: {
   },
 };
