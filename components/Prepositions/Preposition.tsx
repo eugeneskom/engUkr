@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, Text, View, TouchableOpacity, Button } from "react-native";
+import { StyleSheet, FlatList, Text, View, TouchableOpacity, Button } from "react-native";
 import ProgressBar from "../ProgressBar/ProgressBar";
 
 // FUTURE TASK
 // Need to add functionality that will alow me to show the progress (percentage) right away,
 // but still stay on the same screen until user clicks next btn
-
 
 type preposObj = {
   id: number;
@@ -76,7 +75,7 @@ export default function Preposition({ prepRows }: PrepositionProps) {
             <FlatList data={currentRow.choices} keyExtractor={keyExtractor} renderItem={renderItem} />
           </View>
           <View>
-            <Button style={Styles.nextBtn} title="Click Me!" onPress={handleNext} color="#007AFF" />
+            <Button title="Click Me!" onPress={handleNext} color="#007AFF" />
           </View>
         </View>
       ) : (
@@ -88,31 +87,31 @@ export default function Preposition({ prepRows }: PrepositionProps) {
   );
 }
 
-const Styles = {
+const Styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: '100%',
-    flexDirection: 'column',
+    width: "100%",
+    flexDirection: "column",
     justifyContent: "flex-start",
     alignItems: "center",
     backgroundColor: "#FD9317",
   },
   content: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#fff",
     padding: 20,
-    height: 400
+    height: 400,
   },
   item: {
     padding: 20,
     backgroundColor: "#eee",
     margin: 10,
   },
-  list:{
+  list: {
     marginBottom: 20,
   },
   nextBtn: {
-    borderRadius: 20
+    borderRadius: 20,
   },
-};
+});

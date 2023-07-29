@@ -12,7 +12,25 @@ const matchWordsArr: matchWordObjType[] = [
   { id: 0, ukr: "час", eng: "time" },
   { id: 1, ukr: "нічь", eng: "night" },
   { id: 2, ukr: "день", eng: "day" },
+  { id: 3, ukr: "кіт", eng: "cat" },
+  { id: 4, ukr: "собака", eng: "dog" },
+  { id: 5, ukr: "дерево", eng: "tree" },
+  { id: 6, ukr: "вода", eng: "water" },
+  { id: 7, ukr: "вогонь", eng: "fire" },
+  { id: 8, ukr: "книга", eng: "book" },
+  { id: 9, ukr: "пень", eng: "stump" },
+  { id: 10, ukr: "птах", eng: "bird" },
+  { id: 11, ukr: "дорога", eng: "road" },
+  { id: 12, ukr: "хмара", eng: "cloud" },
+  { id: 13, ukr: "дим", eng: "smoke" },
+  { id: 14, ukr: "море", eng: "sea" },
+  { id: 15, ukr: "земля", eng: "earth" },
+  { id: 16, ukr: "дощ", eng: "rain" },
+  { id: 17, ukr: "сонце", eng: "sun" },
+  { id: 18, ukr: "місяць", eng: "moon" },
+  { id: 19, ukr: "зірка", eng: "star" },
 ];
+
 
 const testWord = "hello";
 const example = { ukr: "година", eng: "hour" };
@@ -35,8 +53,8 @@ export default function App() {
   return (
     <View style={{flexDirection:"column"}}>
       <View style={styles.container}>
-        {/* <MatchWords words={matchWordsArr} /> */}
-        <Preposition prepRows={rowObj}/>
+        <MatchWords words={matchWordsArr} />
+        {/* <Preposition prepRows={rowObj}/> */}
         {/* <WordsBuilder set={example} /> */}
       </View>
     </View>
