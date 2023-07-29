@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { matchWordObjType } from "../../types/types";
 import { Text, View, FlatList, SafeAreaView, TouchableOpacity } from "react-native";
 import ProgressBar from "../ProgressBar/ProgressBar";
@@ -25,23 +25,22 @@ export default function MatchWords({ words }: MatchWordsProps) {
   const [engWordsKist, setEngWordsList] = useState(shuffledEngWords);
   const [activeUkrId, setActiveUkrId] = useState<string | null>(null);
   const [activeEngId, setActiveEngId] = useState<string | null>(null);
-  const [isCompleted, setIsCompleted] = useState(false)
+  const [isCompleted, setIsCompleted] = useState(false);
 
+  console.log("Selected words ids", shuffledUkrWords, shuffledEngWords, activeUkrId, activeEngId);
 
-  console.log("Selected words ids",shuffledUkrWords, shuffledEngWords, activeUkrId, activeEngId);
-
-    const wordSelectHandler = (id: string, word: string, index: number, lang: string) => {
+  const wordSelectHandler = (id: string, word: string, index: number, lang: string) => {
     console.log("word:", word);
     console.log("id:", id);
     console.log("lang:", lang);
-    
+
     if (lang === "ukr") {
       setActiveUkrId(id);
       if (activeEngId === id) {
         if (ukrWordsKist.length === 1 && engWordsKist.length === 1) {
           setUkrWordsList([]);
           setEngWordsList([]);
-          setIsCompleted(true)
+          setIsCompleted(true);
         } else {
           setUkrWordsList((prev) => prev.filter((word) => word.id !== id));
           setEngWordsList((prev) => prev.filter((word) => word.id !== id));
@@ -60,10 +59,8 @@ export default function MatchWords({ words }: MatchWordsProps) {
       }
     }
   };
-  
 
-
-  const renderItem = ({ item, index }: { item: { id: string; word: string }; index: number }) => {
+  const renderItem = ({ item, index }: { item: { id: string; word: string; lang: string }; index: number }) => {
     return (
       <TouchableOpacity style={Styles.item} onPress={() => wordSelectHandler(item.id, item.word, index, item.lang)}>
         <Text>{item.word}</Text>

@@ -7,14 +7,18 @@ interface progBarProps {
 }
 
 const ProgressBar = ({ total, answered }: progBarProps) => {
+  // The component accepts total questions and answered ones, and renders the progress to the screen
   const [progress, setProgress] = useState(new Animated.Value(0));
-
+  
   useEffect(() => {
+    const ANIM_DUR = 500;
+
     Animated.timing(progress, {
       toValue: answered,
-      duration: 500, // Adjust the duration of the animation (in milliseconds) as per your preference
+      duration: ANIM_DUR, // Adjust the duration of the animation (in milliseconds) as per your preference
       useNativeDriver: false, // 'true' if you want to use the native driver for performance (only available for certain properties)
     }).start();
+
   }, [answered, progress]);
 
   const widthAnimation = progress.interpolate({
@@ -26,7 +30,7 @@ const ProgressBar = ({ total, answered }: progBarProps) => {
   return (
     <View style={styles.progressBar}>
       <Animated.View style={[styles.progress, { width: widthAnimation }]} />
-      <Text style={styles.progressText}>{`${Math.round((answered / total) * 100)}%`}</Text>
+      <Text style={styles.progressText}>{`${ answered > 0 ? Math.round((answered / total) * 100) : 0}%`}</Text>
     </View>
   );
 };
