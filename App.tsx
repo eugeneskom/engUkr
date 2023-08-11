@@ -5,7 +5,7 @@ import WordsBuilder from "./components/WordsBuilder/WordsBuilder";
 import MatchWords from "./components/MatchWords/MatchWords";
 import { matchWordObjType } from "./types/types";
 import Preposition from "./components/Prepositions/Preposition";
-
+import Registration from "./components/Authentication/Registration/Registration";
 const assembelWordArr = ["word", "blue", "green"];
 
 const matchWordsArr: matchWordObjType[] = [
@@ -35,8 +35,12 @@ const matchWordsArr: matchWordObjType[] = [
 const testWord = "hello";
 const example = { ukr: "година", eng: "hour" };
 const wordsToBuild = [
-  {id:0, ukr: "година", eng: "hour" },
-]
+  { id: 0, ukr: "година", eng: "hour" },
+  { id: 1, ukr: "місяць", eng: "month" },
+  { id: 2, ukr: "тиждень", eng: "week" },
+  { id: 3, ukr: "хвилина", eng: "minute" },
+  { id: 4, ukr: "рік", eng: "year" },
+];
 
 const rowObj = [
   { id: 1, sentence: "I _ my homework", preposition: "did", choices: ["did", "made", "does", "make"] },
@@ -56,9 +60,10 @@ export default function App() {
   return (
     <View style={{flexDirection:"column"}}>
       <View style={styles.container}>
+        <Registration/>
         {/* <MatchWords words={matchWordsArr} /> */}
         {/* <Preposition prepRows={rowObj}/> */}
-        <WordsBuilder set={example} />
+        {/* <WordsBuilder set={wordsToBuild} /> */}
       </View>
     </View>
   );

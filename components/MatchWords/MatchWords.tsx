@@ -84,7 +84,7 @@ export default function MatchWords({ words }: MatchWordsProps) {
     }
   };
 
-  const renderItem = ({ item, index }: { item: { id: string; word: string; lang: string }; index: number }) => {
+  const renderItem = ({ item, index }: { item: { id: string; word: string; lang: string }, index: number }) => {
     return (
       <TouchableOpacity style={Styles.item} onPress={() => wordSelectHandler(item.id, item.word, index, item.lang)}>
         <Text>{item.word}</Text>

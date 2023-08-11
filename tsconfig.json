@@ -6,6 +6,8 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
+    "strictNullChecks": true, // Add this line
+    "noImplicitAny": true,    // Add this line
     "skipLibCheck": true
   },
   "extends": "expo/tsconfig.base"

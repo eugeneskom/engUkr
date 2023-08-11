@@ -1,4 +1,5 @@
 export type wordTranslation = {
+  id: number,
   ukr: string,
   eng: string
 }

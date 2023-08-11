@@ -3,35 +3,61 @@ import { StyleSheet, Text, View, FlatList, TouchableOpacity, SafeAreaView } from
 import { wordTranslation } from "../../types/types";
 
 type wordsBuilderProps = {
-  set: wordTranslation;
+  set: wordTranslation[];
 };
 
 // for long words would be great to have a functionality that will display only unique letters,
 // and if they repeats just display a number above the letter saying home many such letters we have
 
 let buildingBowrd = ""; // this will be a word that is being build when user is picking letters correctly
-export default function WordsBuilder({ set: { ukr, eng } }: wordsBuilderProps) {
+export default function WordsBuilder({ set }: wordsBuilderProps) {
   const [count, setCount] = useState(0);
   const [activeLetterIndex, setActiveLetterIndex] = useState(-1);
   const [isLetterMatch, setIsLetterMatch] = useState(false);
   const [engWordArr, setEngWordArr] = useState<string[]>([]);
   const [isWordCompeleted, setIsWordCompleted] = useState(false);
+  const [currentWordId, setCurrentWordId] = useState(0);
+  const [currentWords, setCurrentWords] = useState({
+    eng: "",
+    ukr: "",
+  });
 
-  console.log("isWordCompeleted: ", isWordCompeleted);
+  console.log("engWordArr: ", engWordArr);
+  // const mixLettersArrayHandler = (eng: string): string[] => {
+  //   if (eng.length <= 1) {
+  //     return eng.split(""); // if the string is one character or less, just return it
+  //   }
+
+  //   let letters = eng.split("");
+  //   let mixedLetters;
+
+  //   do {
+  //     mixedLetters = [...letters].sort(() => Math.random() - 0.5);
+  //   } while (eng === mixedLetters.join(""));
+
+  //   return mixedLetters;
+  // };
+
   const mixLettersArrayHandler = (eng: string): string[] => {
-    if (eng.length <= 1) {
-      return eng.split(""); // if the string is one character or less, just return it
+    try {
+      if (eng.length <= 1) {
+        return eng.split(""); // if the string is one character or less, just return it
+      }
+  
+      let letters = eng.split("");
+      let mixedLetters;
+  
+      do {
+        mixedLetters = [...letters].sort(() => Math.random() - 0.5);
+      } while (eng === mixedLetters.join(""));
+  
+      return mixedLetters;
+    } catch (error) {
+      console.error("Error in mixLettersArrayHandler:", error);
+      return []; // Return an empty array in case of an error
     }
-
-    let letters = eng.split("");
-    let mixedLetters;
-
-    do {
-      mixedLetters = [...letters].sort(() => Math.random() - 0.5);
-    } while (eng === mixedLetters.join(""));
-
-    return mixedLetters;
   };
+  
 
   const incrementCount = () => {
     setCount(count + 1);
@@ -39,13 +65,13 @@ export default function WordsBuilder({ set: { ukr, eng } }: wordsBuilderProps) {
 
   const checkLetterHandler = (letter: string, index: number) => {
     setActiveLetterIndex(index); // setting active index helps to add class to the pressed letter
-    const letterMatch = eng[count] === letter;
+    const letterMatch = currentWords.eng[count] === letter;
     setIsLetterMatch(letterMatch);
 
     if (letterMatch) {
       setEngWordArr((prev) => prev.filter((_, i) => i !== index)); // removing pressed btn
       buildingBowrd += letter;
-      if (buildingBowrd.length === eng.length) {
+      if (buildingBowrd.length === currentWords.eng.length) {
         setIsWordCompleted(true);
       }
       incrementCount(); // when the letter is matched, we encrice the counter to track the next letter user needs to input
@@ -72,14 +98,19 @@ export default function WordsBuilder({ set: { ukr, eng } }: wordsBuilderProps) {
   };
 
   useEffect(() => {
-    setEngWordArr(mixLettersArrayHandler(eng));
+    const currentWordEng = set[currentWordId].eng;
+    const currentWordUkr = set[currentWordId].ukr;
+    setCurrentWords({ eng: currentWordEng, ukr: currentWordUkr });
+    setEngWordArr(mixLettersArrayHandler(currentWordEng));
     return () => {};
-  }, []);
+  }, [currentWordId]);
+
+  // console.log('currentWords.eng',currentWords.eng, 'currentWords.ukr',currentWords.ukr)
 
   return (
-    <SafeAreaView style={{alignContent:'center', justifyContent:"center"}}>
+    <SafeAreaView style={{ alignContent: "center", justifyContent: "center" }}>
       <View>
-        <Text>{ukr}</Text>
+        <Text>{currentWords?.ukr}</Text>
       </View>
       {isWordCompeleted && (
         <View>
@@ -89,9 +120,11 @@ export default function WordsBuilder({ set: { ukr, eng } }: wordsBuilderProps) {
       <View>
         <Text>{buildingBowrd}</Text>
       </View>
-      <View style={flatListStyles.listContainer}>
-        <FlatList style={flatListStyles.list} keyExtractor={keyExtractor} data={engWordArr} renderItem={renderItem} horizontal={true} />
-      </View>
+      {engWordArr.length > 0 && (
+        <View style={flatListStyles.listContainer}>
+          {/* <FlatList style={flatListStyles.list} keyExtractor={keyExtractor} data={engWordArr} renderItem={renderItem} horizontal={true} /> */}
+        </View>
+      )}
     </SafeAreaView>
   );
 }
