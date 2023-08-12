@@ -1,8 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, TextInput, Button, StyleSheet, TouchableOpacity, Text } from "react-native";
 import axios from "axios";
+import UserContext from "../../../context/UserContext";
+
+type RegistrationParams = {
+  handleIsLoggedIn: (isLoggedIn: boolean) => void;
+};
 
 const Registration = () => {
+  const { handleIsLoggedIn } = useContext(UserContext); // Get the function from context
+
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -11,19 +18,19 @@ const Registration = () => {
   const handleRegistration = async () => {
     // Perform registration logic here
     try {
-
-      // {
-      //   email,
-      //   username: `${firstName} ${lastName}`,
-      //   password
-      // }
-    
-      const response = await axios.get("http://localhost:3000/exercise_sentences");
+      const response = await axios.post("http://192.168.0.106:3000/register", {
+        email,
+        username: `${firstName} ${lastName}`,
+        password,
+      });
 
       // console.log(response)
+      if (response.status == 201) {
+        handleIsLoggedIn(false);
+      }
 
       // Handle response from the server (e.g., show success message)
-      console.log("Registration success:", response.data);
+      console.log("Registration success:", response);
     } catch (error) {
       // Handle error (e.g., show error message)
       console.log("Registration failed:", error);

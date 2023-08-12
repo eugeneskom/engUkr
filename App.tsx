@@ -1,11 +1,17 @@
+import React, { useEffect, useState } from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, Image, Button, TextInput, FlatList, TouchableOpacity } from "react-native";
-import { useState } from "react";
 import WordsBuilder from "./components/WordsBuilder/WordsBuilder";
 import MatchWords from "./components/MatchWords/MatchWords";
 import { matchWordObjType } from "./types/types";
 import Preposition from "./components/Prepositions/Preposition";
 import Registration from "./components/Authentication/Registration/Registration";
+import Login from "./components/Authentication/Login/Login";
+import UserContext from "./context/UserContext";
+
 const assembelWordArr = ["word", "blue", "green"];
 
 const matchWordsArr: matchWordObjType[] = [
@@ -31,7 +37,6 @@ const matchWordsArr: matchWordObjType[] = [
   { id: 19, ukr: "зірка", eng: "star" },
 ];
 
-
 const testWord = "hello";
 const example = { ukr: "година", eng: "hour" };
 const wordsToBuild = [
@@ -55,18 +60,63 @@ const rowObj = [
   { id: 10, sentence: "He was hiding _ the bed", preposition: "under", choices: ["under", "behind", "below", "above"] },
 ];
 
+const Stack = createStackNavigator();
 
 export default function App() {
+  const [userStatus, setUserStatus] = useState("notRegistered");
+
+  const handleIsLoggedIn = async (isLoggedIn: boolean) => {
+    if (isLoggedIn) {
+      await AsyncStorage.setItem("isLoggedIn", "true");
+    } else {
+      await AsyncStorage.setItem("isLoggedIn", "false");
+    }
+
+    const setItem = await AsyncStorage.getItem("isLoggedIn");
+    console.log("SET_ITEM: ", setItem);
+  };
+  // Check user authentication status
+  const checkUserStatus = async () => {
+    try {
+      const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
+      if (isLoggedIn === "true") {
+        setUserStatus("loggedIn");
+      } else if (isLoggedIn === "false") {
+        setUserStatus("registered");
+      } else {
+        setUserStatus("notRegistered");
+      }
+    } catch (error) {
+      console.error("Error checking user status:", error);
+    }
+  };
+
+  useEffect(() => {
+    checkUserStatus();
+  }, []);
+
+  console.log("userStatus:", userStatus);
+
   return (
-    <View style={{flexDirection:"column"}}>
-      <View style={styles.container}>
-        <Registration/>
-        {/* <MatchWords words={matchWordsArr} /> */}
-        {/* <Preposition prepRows={rowObj}/> */}
-        {/* <WordsBuilder set={wordsToBuild} /> */}
-      </View>
-    </View>
+    <UserContext.Provider value={{ userStatus, handleIsLoggedIn }}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          {userStatus === "notRegistered" && <Stack.Screen name="Registration" component={Registration} />}
+          {userStatus === "registered" && <Stack.Screen name="Login" component={Login} />}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </UserContext.Provider>
   );
+  // return (
+  //   <View style={{flexDirection:"column"}}>
+  //     <View style={styles.container}>
+  //       {/* <Registration/> */},
+  //       {/* <MatchWords words={matchWordsArr} /> */}
+  //       {/* <Preposition prepRows={rowObj}/> */}
+  //       {/* <WordsBuilder set={wordsToBuild} /> */}
+  //     </View>
+  //   </View>
+  // );
 }
 
 const styles = StyleSheet.create({
@@ -77,6 +127,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 100,
-
   },
 });
