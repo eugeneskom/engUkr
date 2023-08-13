@@ -11,7 +11,8 @@ import Preposition from "./components/Prepositions/Preposition";
 import Registration from "./components/Authentication/Registration/Registration";
 import Login from "./components/Authentication/Login/Login";
 import UserContext from "./context/UserContext";
-
+import MainScreen from "./components/MainScreen/MainScreen";
+import Loader from "./components/loader/Loader";
 const assembelWordArr = ["word", "blue", "green"];
 
 const matchWordsArr: matchWordObjType[] = [
@@ -63,7 +64,7 @@ const rowObj = [
 const Stack = createStackNavigator();
 
 export default function App() {
-  const [userStatus, setUserStatus] = useState("notRegistered");
+  const [userStatus, setUserStatus] = useState("loading");
 
   const handleIsLoggedIn = async (isLoggedIn: boolean) => {
     if (isLoggedIn) {
@@ -74,7 +75,13 @@ export default function App() {
 
     const setItem = await AsyncStorage.getItem("isLoggedIn");
     console.log("SET_ITEM: ", setItem);
+    checkUserStatus();
   };
+
+  const removeIsLoggedIn = async () => {
+    await AsyncStorage.removeItem("isLoggedIn");
+  };
+
   // Check user authentication status
   const checkUserStatus = async () => {
     try {
@@ -92,17 +99,20 @@ export default function App() {
   };
 
   useEffect(() => {
+    // removeIsLoggedIn()
     checkUserStatus();
   }, []);
 
   console.log("userStatus:", userStatus);
 
   return (
-    <UserContext.Provider value={{ userStatus, handleIsLoggedIn }}>
+    <UserContext.Provider value={{ userStatus, handleIsLoggedIn, checkUserStatus }}>
       <NavigationContainer>
         <Stack.Navigator>
+          {userStatus === "loading" && <Stack.Screen name="Loading" component={Loader} />}
           {userStatus === "notRegistered" && <Stack.Screen name="Registration" component={Registration} />}
           {userStatus === "registered" && <Stack.Screen name="Login" component={Login} />}
+          {userStatus === "loggedIn" && <Stack.Screen name="Main Screen" component={MainScreen} />}
         </Stack.Navigator>
       </NavigationContainer>
     </UserContext.Provider>
