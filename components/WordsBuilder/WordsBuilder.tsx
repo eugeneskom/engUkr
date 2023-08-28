@@ -22,21 +22,6 @@ export default function WordsBuilder({ set }: wordsBuilderProps) {
     ukr: "",
   });
 
-  console.log("engWordArr: ", engWordArr);
-  // const mixLettersArrayHandler = (eng: string): string[] => {
-  //   if (eng.length <= 1) {
-  //     return eng.split(""); // if the string is one character or less, just return it
-  //   }
-
-  //   let letters = eng.split("");
-  //   let mixedLetters;
-
-  //   do {
-  //     mixedLetters = [...letters].sort(() => Math.random() - 0.5);
-  //   } while (eng === mixedLetters.join(""));
-
-  //   return mixedLetters;
-  // };
 
   const mixLettersArrayHandler = (eng: string): string[] => {
     try {

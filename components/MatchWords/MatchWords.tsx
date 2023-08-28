@@ -22,6 +22,7 @@ let PAGE_INDEX = 0,
   COUNT = 0,
   WORDS_PER_PAGE = 5,
   ANSWERED_CORRECT = 0;
+  
 export default function MatchWords({ words }: MatchWordsProps) {
   // Need to make the componen work as the Prepositions one, after completing first set of words
   // need to show another list, as many times as required
